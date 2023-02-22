@@ -3,6 +3,7 @@ def registry = 'https://registry.slowcoder.com'
 
 node(''){
     stage('Checkout'){
+        sh'docker system prune'
         checkout scm
     }
 
