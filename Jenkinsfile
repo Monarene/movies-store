@@ -31,7 +31,7 @@ node(''){
     }
 
     stage('Build'){
-        dockerImage = docker.build(imageName)
+        dockerImage = docker.build(myImageName)
     }
 
     stage('Push'){
