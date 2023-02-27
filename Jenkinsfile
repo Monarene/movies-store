@@ -1,5 +1,5 @@
 def imageName = 'mlabouardy/movies-store'
-def registry = 'https://registry.slowcoder.com'
+def myImageName = 'monarene/movie-parser'
 
 node(''){
     stage('Checkout'){
@@ -30,24 +30,26 @@ node(''){
         )
     }
 
-    // stage('Build'){
-    //     docker.build(imageName)
-    // }
+    stage('Build'){
+        dockerImage = docker.build(imageName)
+    }
 
-    // stage('Push'){
-    //     docker.withRegistry(registry, 'registry') {
-    //         docker.image(imageName).push(commitID())
-
-    //         if (env.BRANCH_NAME == 'develop') {
-    //             docker.image(imageName).push('develop')
-    //         }
-    //     }
-    // }
+    stage('Push'){
+        withDockerRegistry([credentialsId: "dockerhub", url: "" ]) {
+        dockerImage.push(commitID())
+        
+        if (env.BRANCH_NAME == 'develop') {
+            dockerImage.push('develop')
+        }
+        
+        }
+        
+    }
 }
 
-// def commitID() {
-//     sh 'git rev-parse HEAD > .git/commitID'
-//     def commitID = readFile('.git/commitID').trim()
-//     sh 'rm .git/commitID'
-//     commitID
-// }
+def commitID() {
+    sh 'git rev-parse HEAD > .git/commitID'
+    def commitID = readFile('.git/commitID').trim()
+    sh 'rm .git/commitID'
+    commitID
+}
