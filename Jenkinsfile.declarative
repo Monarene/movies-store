@@ -1,5 +1,5 @@
 def imageName = 'mlabouardy/movies-store'
-def myImageName = 'monarene/movie-parser'
+def myImageName = 'monarene/movie-store'
 
 
 pipeline {
