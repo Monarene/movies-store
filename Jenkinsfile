@@ -2,7 +2,7 @@ def functions = ['MoviesStoreListMovies', 'MoviesStoreSearchMovie', 'MoviesStore
 def environments = ['master':'production', 'preprod':'staging', 'develop':'sandbox']
 def imageName = 'mlabouardy/movies-store'
 def bucket = 'deployment-packages-watchlist-456'
-def region = 'eu-west-3'
+def region = 'us-east-2'
 
 node(''){
     try {
