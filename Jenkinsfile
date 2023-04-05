@@ -70,6 +70,11 @@ node(''){
                             --s3-bucket ${bucket} --s3-key ${it}/${fileName}.zip \
                             --region ${region}"
 
+                        timeout(time: 20, unit: 'SECONDS') {
+                            sh '...'
+                            echo '...'
+                        }
+
                         def version = sh(
                             script: "aws lambda publish-version --function-name ${it} \
                                          --description ${fileName} --region ${region} | jq -r '.Version'",
