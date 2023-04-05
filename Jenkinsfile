@@ -61,40 +61,40 @@ node(''){
             parallel parallelStagesMap
         }
 
-        // stage('Deploy'){
-        //     def fileName = commitID()
-        //     def parallelStagesMap = functions.collectEntries {
-        //         ["${it}" : {
-        //             stage("Lambda: ${it}") {
-        //                 sh "aws lambda update-function-code --function-name ${it} \
-        //                     --s3-bucket ${bucket} --s3-key ${it}/${fileName}.zip \
-        //                     --region ${region}"
+        stage('Deploy'){
+            def fileName = commitID()
+            def parallelStagesMap = functions.collectEntries {
+                ["${it}" : {
+                    stage("Lambda: ${it}") {
+                        sh "aws lambda update-function-code --function-name ${it} \
+                            --s3-bucket ${bucket} --s3-key ${it}/${fileName}.zip \
+                            --region ${region}"
 
-        //                 def version = sh(
-        //                     script: "aws lambda publish-version --function-name ${it} \
-        //                                  --description ${fileName} --region ${region} | jq -r '.Version'",
-        //                     returnStdout: true
-        //                 ).trim()
+                        def version = sh(
+                            script: "aws lambda publish-version --function-name ${it} \
+                                         --description ${fileName} --region ${region} | jq -r '.Version'",
+                            returnStdout: true
+                        ).trim()
 
-        //                 if (env.BRANCH_NAME == 'preprod' || env.BRANCH_NAME == 'develop'){
-        //                     sh "aws lambda update-alias  --function-name ${it} \
-        //                          --name ${environments[env.BRANCH_NAME]} --function-version ${version}\
-        //                          --region ${region}"
-        //                 }
+                        // if (env.BRANCH_NAME == 'preprod' || env.BRANCH_NAME == 'develop'){
+                        //     sh "aws lambda update-alias  --function-name ${it} \
+                        //          --name ${environments[env.BRANCH_NAME]} --function-version ${version}\
+                        //          --region ${region}"
+                        // }
 
-        //                 if(env.BRANCH_NAME == 'master'){
-        //                     timeout(time: 2, unit: "HOURS") {
-        //                         input message: "Deploy to production?", ok: "Yes"
-        //                     }
-        //                     sh "aws lambda update-alias  --function-name ${it} \
-        //                          --name ${environments[env.BRANCH_NAME]} --function-version ${version}\
-        //                          --region ${region}"
-        //                 }
-        //             }
-        //         }]
-        //     }
-        //     parallel parallelStagesMap
-        // }
+                        // if(env.BRANCH_NAME == 'master'){
+                        //     timeout(time: 2, unit: "HOURS") {
+                        //         input message: "Deploy to production?", ok: "Yes"
+                        //     }
+                        //     sh "aws lambda update-alias  --function-name ${it} \
+                        //          --name ${environments[env.BRANCH_NAME]} --function-version ${version}\
+                        //          --region ${region}"
+                        // }
+                    }
+                }]
+            }
+            parallel parallelStagesMap
+        }
     } catch(e){
         currentBuild.result = 'FAILED'
         throw e
