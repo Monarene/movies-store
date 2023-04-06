@@ -4,6 +4,7 @@ def imageName = 'mlabouardy/movies-store'
 def bucket = 'deployment-packages-watchlist-456'
 def region = 'us-east-2'
 
+// Trigger static build
 node(''){
     try {
         stage('Checkout'){
