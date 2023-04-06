@@ -71,8 +71,8 @@ node(''){
                             --region ${region}"
 
                         timeout(time: 20, unit: 'SECONDS') {
-                            sh '...'
-                            echo '...'
+                            sh 'echo "TIMEOUT"'
+                            
                         }
 
                         def version = sh(
